@@ -9,6 +9,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
@@ -40,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button qrCodeFoundButton;
     private TextView qrCodeTextView;
+    private ConstraintLayout constraintLayout;
     private CardView cardView;
     private String qrCode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +52,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         qrCodeTextView = findViewById(R.id.qrTextView);
+        constraintLayout = findViewById(R.id.qrConstraintLayout);
         cardView = findViewById(R.id.card_view);
         cardView.setVisibility(View.INVISIBLE);
+
         //qrCodeTextView.setVisibility(View.INVISIBLE);
 
-//        qrCodeFoundButton = findViewById(R.id.activity_main_qrCodeFoundButton);
+        qrCodeFoundButton = findViewById(R.id.actionButton);
 //        qrCodeFoundButton.setVisibility(View.INVISIBLE);
 //        qrCodeFoundButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -138,8 +143,10 @@ public class MainActivity extends AppCompatActivity {
             public void onQRCodeFound(String _qrCode) {
                 qrCode = _qrCode;
                 cardView.setVisibility(View.VISIBLE);
+                constraintLayout.setVisibility(View.VISIBLE);
                 //qrCodeTextView.setVisibility(View.VISIBLE);
                 qrCodeTextView.setText(Html.fromHtml(qrCode));
+                qrCodeFoundButton.setVisibility(View.VISIBLE);
                 //qrCodeTextView.setText(qrCode);
 
                 //qrCodeFoundButton.setVisibility(View.VISIBLE);
