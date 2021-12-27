@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">HtbrBarCode</string>
+    <string name="open_url">Go to Website</string>
+    <string name="write_mail">Write Mail</string>
+    <string name="call_number">Call number</string>
+    <string name="write_sms">Write SMS</string>
+    <string name="show_contact">"Show Contact"</string>
+    <string name="show_blockchain">Bitcoin info</string>
+    <string name="connect_wifi">Connect to network</string>
 </resources>

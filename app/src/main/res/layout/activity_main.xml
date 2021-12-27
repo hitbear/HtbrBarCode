@@ -66,7 +66,8 @@
                 android:visibility="invisible"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                app:layout_constraintTop_toBottomOf="@id/qrTextView">
+                app:layout_constraintTop_toBottomOf="@id/qrTextView"
+                android:backgroundTint="@color/lightblue">
 
             </Button>
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="open_url">Website öffnen</string>
+    <string name="write_mail">Mail verfassen</string>
+    <string name="call_number">Nummwer wählen</string>
+    <string name="write_sms">SMS verfassen</string>
+    <string name="show_contact">"Kontakt anzeigen"</string>
+    <string name="show_blockchain">Bitcoin Info</string>
+    <string name="connect_wifi">Mit Netzwerk verbinden</string>
+</resources>

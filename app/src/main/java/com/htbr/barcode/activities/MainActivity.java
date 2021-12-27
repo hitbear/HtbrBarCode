@@ -30,7 +30,9 @@ import android.widget.Toast;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.htbr.barcode.R;
 import com.htbr.barcode.interfaces.QRCodeFoundListener;
+import com.htbr.barcode.utils.Parser;
 import com.htbr.barcode.utils.QRCodeImageAnalyzer;
+import com.htbrkt.ParseResult;
 
 import java.util.concurrent.ExecutionException;
 
@@ -104,10 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 // their decision.
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
             }
-            return;
         }
     }
-
 
     private void startCamera() {
         cameraProviderFuture.addListener(() -> {
@@ -142,14 +142,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onQRCodeFound(String _qrCode) {
                 qrCode = _qrCode;
+
+                ParseResult parseResult = Parser.parse(getApplicationContext(), qrCode);
+                String format = parseResult.getParsedString();
+
                 cardView.setVisibility(View.VISIBLE);
                 constraintLayout.setVisibility(View.VISIBLE);
-                //qrCodeTextView.setVisibility(View.VISIBLE);
                 qrCodeTextView.setText(Html.fromHtml(qrCode));
-                qrCodeFoundButton.setVisibility(View.VISIBLE);
-                //qrCodeTextView.setText(qrCode);
 
-                //qrCodeFoundButton.setVisibility(View.VISIBLE);
+                if (format != null){
+                    qrCodeFoundButton.setVisibility(View.VISIBLE);
+                    qrCodeFoundButton.setText(format);
+                    qrCodeFoundButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getApplicationContext(),"Geduld", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
 
             @Override
