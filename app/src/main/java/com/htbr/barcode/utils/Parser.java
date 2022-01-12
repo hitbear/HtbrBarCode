@@ -4,9 +4,12 @@ import com.htbrkt.ParseResult;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import androidx.core.net.MailTo;
 
 import com.htbr.barcode.R;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 
 public class Parser {
@@ -20,8 +23,9 @@ public class Parser {
             Intent intent = new Intent();
             return new ParseResult(context.getResources().getString(R.string.connect_wifi), intent);
         } else if (qrStringLower.startsWith("mailto")){
-            String[] title = {"Abundance"};
-            Intent intent = composeEmail(title,"subject", null);
+            String to = "";
+            MailTo mailTo = MailTo.parse(qrString);
+            Intent intent = composeEmail(mailTo);
             return new ParseResult(context.getResources().getString(R.string.write_mail), intent);
         } else if (qrStringLower.startsWith("tel")){
             Intent intent = dialPhoneNumber(qrString);
@@ -37,7 +41,7 @@ public class Parser {
             Intent intent = new Intent();
             return new ParseResult(context.getResources().getString(R.string.show_blockchain), intent);
         }
-        return null;
+        return new ParseResult("", new Intent());
 
         //ToDo:
         // Calendar events
@@ -48,16 +52,26 @@ public class Parser {
 
     }
 
-    public static Intent composeEmail(String[] addresses, String subject, Uri attachment) {
+    //public static Intent composeEmail(String[] addresses, String subject, Uri attachment) {
+    public static Intent composeEmail(MailTo mailTo) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
-        if (subject != null){
-            intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_EMAIL, mailTo.getBody().split(";"));
+        if (mailTo.getSubject() != null){
+            intent.putExtra(Intent.EXTRA_SUBJECT, mailTo.getSubject());
         }
-        if (attachment != null){
-            intent.putExtra(Intent.EXTRA_STREAM, attachment);
+        if (mailTo.getCc() != null){
+            intent.putExtra(Intent.EXTRA_CC, mailTo.getCc().split(";"));
         }
+        if (mailTo.getBcc() != null){
+            intent.putExtra(Intent.EXTRA_BCC, mailTo.getBcc().split(";"));
+        }
+        if (mailTo.getBody() != null){
+            intent.putExtra(Intent.EXTRA_TEXT, mailTo.getBody());
+        }
+
+        //ToDo: EXTRA STREAM = attachment
+        //ToDo: What to do with multiple Tos, CCs, BCCs
         return intent;
     }
 
@@ -69,14 +83,14 @@ public class Parser {
 
     public static Intent dialPhoneNumber(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + phoneNumber));
+        intent.setData(Uri.parse(phoneNumber));
         return intent;
     }
 
     public static Intent writeSMS(String sms, String number){
         Intent intent = new Intent();
-        intent.setData(Uri.parse("sms:"));
         intent.setType("vnd.android-dir/mms-sms");
+        intent.setData(Uri.parse("sms:"));
         intent.putExtra(Intent.EXTRA_TEXT, "");
         intent.putExtra("address",  number);
         return intent;

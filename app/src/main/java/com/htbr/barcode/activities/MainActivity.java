@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -145,18 +146,23 @@ public class MainActivity extends AppCompatActivity {
 
                 ParseResult parseResult = Parser.parse(getApplicationContext(), qrCode);
                 String format = parseResult.getParsedString();
+                Intent intent = parseResult.getIntent();
 
                 cardView.setVisibility(View.VISIBLE);
                 constraintLayout.setVisibility(View.VISIBLE);
                 qrCodeTextView.setText(Html.fromHtml(qrCode));
 
-                if (format != null){
+                if (format != ""){
                     qrCodeFoundButton.setVisibility(View.VISIBLE);
                     qrCodeFoundButton.setText(format);
                     qrCodeFoundButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(getApplicationContext(),"Geduld", Toast.LENGTH_SHORT).show();
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplicationContext(),"Geduld.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
