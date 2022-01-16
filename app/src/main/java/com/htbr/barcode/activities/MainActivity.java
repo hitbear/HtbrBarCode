@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                             if (intent.resolveActivity(getPackageManager()) != null) {
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(getApplicationContext(),"Geduld.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"Keine App gefunden.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
