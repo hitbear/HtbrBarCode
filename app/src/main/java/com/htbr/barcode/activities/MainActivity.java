@@ -3,9 +3,12 @@ package com.htbr.barcode.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
+
+import androidx.camera.core.CameraControl;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
+import androidx.camera.core.TorchState;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.cardview.widget.CardView;
@@ -15,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -28,6 +32,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.htbr.barcode.R;
 import com.htbr.barcode.interfaces.QRCodeFoundListener;
@@ -133,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         preview.setSurfaceProvider(previewView.createSurfaceProvider());
 
 
+
         ImageAnalysis imageAnalysis =
                 new ImageAnalysis.Builder()
                         .setTargetResolution(new Size(1280, 720))
@@ -177,5 +183,27 @@ public class MainActivity extends AppCompatActivity {
 
         //Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, preview);
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
+        CameraControl cameraControl = camera.getCameraControl();
+
+
+        FloatingActionButton torchSwitchButton = (FloatingActionButton) findViewById(R.id.lightSwitchButton);
+        torchSwitchButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+                try {
+                    int value = camera.getCameraInfo().getTorchState().getValue();
+                    if (value == 1){
+                        cameraControl.enableTorch(false);
+                    } else {
+                        cameraControl.enableTorch(true);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
     }
 }

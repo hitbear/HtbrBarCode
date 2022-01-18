@@ -9,6 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lightblue">#6BAED9EC</color>
     <color name="semiTransparentColor">#95ffffff</color>
-
+    <color name="semiTransparentYellow">#D1B70E</color>
 
 </resources>
